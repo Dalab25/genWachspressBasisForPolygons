@@ -35,51 +35,13 @@ def backslash(A, b):
                 pass  # picked bad variables, can't solve
 
 
-def setUpLinearSystemFromDict(newDict, unknowns, order, pitch):
-    """
-    From the dictionnary, a linear system is created
-    The keys of the dictionnary are monomials
-    The values are sympy expressions corresponding to the projection of the monomial in the basis
-    From there, an identification is done to create the linear system
-    """
-    nEquations = len(newDict.keys())  # nRows
-    nUnknowns = len(unknowns)
-    A = np.zeros(nEquations * nUnknowns).reshape(nEquations, nUnknowns)
-    B = np.zeros(nEquations)
-    A[:] = np.nan
-    B[:] = np.nan
-
-    x = sympy.Symbol('x')
-    y = sympy.Symbol('y')
-    for i, (key, equation) in enumerate(newDict.items()):
-        if key in [x**2*y**order, y**(order+2)]:
-            B[i] = 1
-        elif key in [y**order]:
-            B[i] = -pitch**2
-        else:
-            B[i] = 0
-        for j, u in enumerate(unknowns):
-            coeff = equation[u]
-            A[i,j] = coeff
-        try:
-            B[i] += -equation[1]
-        except:
-            pass
-
-    print(">>> Matrix A = \n", A)
-    print(">>> RHS B = \n", B)
-    print(">>> Rank of A = ", np.linalg.matrix_rank(A))
-    print(">>> nEquations = {}, nUnknowns = {}".format(nEquations, nUnknowns))
-
-    return A, B
-
-
 def setUpLinearSystemFromDictNewIrregularPentagon(dictAllMono, unknowns):
     """
-    From the dictionnary, a linear system is created
+    Function to create a linear system from a given dictionnary
     The keys of the dictionnary are monomials
-    The values are sympy expressions corresponding to the projection of the monomial in the basis
+    The values are sympy expressions corresponding to the projection of the monomial in the WSF basis
     From there, an identification is done to create the linear system
+    The identification is based on the expected values computed from the adjoint of the polygon
     """
     pentagon = IrregularPentagon()
     coeffsAdjoint = pentagon.coeffsAdjoint
@@ -145,10 +107,11 @@ def setUpLinearSystemFromDictNewIrregularPentagon(dictAllMono, unknowns):
 
 def setUpLinearSystemFromDictNew(dictAllMono, unknowns, pitch):
     """
-    From the dictionnary, a linear system is created
+    Function to create a linear system from a given dictionnary
     The keys of the dictionnary are monomials
-    The values are sympy expressions corresponding to the projection of the monomial in the basis
+    The values are sympy expressions corresponding to the projection of the monomial in the WSF basis
     From there, an identification is done to create the linear system
+    The identification is based on the expected values computed from the adjoint of the polygon
     """
     nEquationsList = []
     degrees = dictAllMono.keys()
@@ -218,7 +181,6 @@ def almostEqualRelativeAndAbs(a, b, maxDiff=1.e-12, maxRelDiff=1.e-11):
         return True
 
     return False
-
 
 def compareSolutionToRef(ref, sol, unknowns):
     for u in unknowns:
