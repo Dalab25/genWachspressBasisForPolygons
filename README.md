@@ -12,6 +12,6 @@ Third, the idea is to create a class such as WSF_to_generate_regular_hexagon.py.
 
 Fourth, a file such as get_symbolic_coefficients.py is defined in order to compute the Wachspress functions. This file requires a function in order to project a function f in the WSF basis (see expressions_functions_regular_hexagon.py). This is useful to project the monomials inside the WSF basis. Also, the identification is done by looking at the coefficient in front of the adjoint of the polygon. See the function "setUpLinearSystemFromDictNewIrregularPentagon" for instance in algebric_functions.py
 
-Fifth, since they is an infinity of solution, the reduced row echelon form (rref) matrix is used in order to chose one specific solution. In our case, the free variables obtained from the rref matrix are fixed to 0. New functions will be added to give more options to the user.
+Fifth, since there is an infinity of solution, the reduced row echelon form (rref) matrix is used in order to chose one specific solution. In our case, the free variables obtained from the rref matrix are fixed to 0. New functions will be added to give more options to the user.
 
 Tests can then be performed to ensure that the WSF are verifying the geometrical constraints in the file test_constraints_verification. The geometrical constraints correspond to the Lagrange properties i.e. w_i(node_j) = delta_ij with delta_ij the Kronecker symbol. Also, the file compute_projection_error ensures that the monomials are well projected in the WSF basis.
